@@ -176,7 +176,7 @@ class Dullard::Sheet
   end
 
   def rows
-    Enumerator.new(row_count) do |y|
+    Enumerator.new do |y|
       next unless @file
       @file.rewind
       shared = false
