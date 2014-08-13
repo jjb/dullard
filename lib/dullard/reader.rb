@@ -84,7 +84,7 @@ class Dullard::Workbook
   end
 
   def sheets
-    workbook = Nokogiri::XML::Document.parse(@zipfs.file.open("xl/workbook.xml"))
+    workbook = Nokogiri::XML::Document.parse(@zipfs.file.open("xl/workbook.xml").read)
     @sheets = workbook.css("sheet").each_with_index.map {|n,i| Dullard::Sheet.new(self, n.attr("name"), n.attr("sheetId"), i+1) }
   end
 
@@ -95,7 +95,7 @@ class Dullard::Workbook
   def read_string_table
     @string_table = []
     entry = ''
-    Nokogiri::XML::Reader(@zipfs.file.open("xl/sharedStrings.xml")).each do |node|
+    Nokogiri::XML::Reader(@zipfs.file.open("xl/sharedStrings.xml").read).each do |node|
       if node.name == "si" and node.node_type == Nokogiri::XML::Reader::TYPE_ELEMENT
         entry = ''
       elsif node.name == "si" and node.node_type == Nokogiri::XML::Reader::TYPE_END_ELEMENT
@@ -108,7 +108,7 @@ class Dullard::Workbook
   end
 
   def read_styles
-    doc = Nokogiri::XML(@zipfs.file.open("xl/styles.xml"))
+    doc = Nokogiri::XML(@zipfs.file.open("xl/styles.xml").read)
     
     @num_formats = {}
     @cell_xfs = []
